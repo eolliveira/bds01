@@ -27,18 +27,20 @@ public class EmployeeService {
     }
 
     @Transactional
-    public EmployeeDTO insert(EmployeeDTO entity) {
-        Employee e = new Employee();
-        e.id = entity.getId();
-        e.name = entity.getName();
-        e.email = entity.getEmail();
+    public EmployeeDTO insert(EmployeeDTO dto) {
+        Employee employee = new Employee();
+        dtoToEntity(dto, employee);
+        employee = employeeRepository.save(employee);
 
-        Department d = departmentRepository.findById(entity.getDepartmentId()).get();
+        return new EmployeeDTO(employee);
+    }
 
-        e.department = d;
+    private void dtoToEntity(EmployeeDTO dto, Employee entity) {
+        Department department = departmentRepository.findById(dto.getDepartmentId()).get();
 
-        e = employeeRepository.save(e);
-
-        return new EmployeeDTO(e);
+        entity.setId(dto.getId());
+        entity.setName(dto.getName());
+        entity.setEmail(dto.getEmail());
+        entity.setDepartment(department);
     }
 }

@@ -20,6 +20,6 @@ public class DepartmentService {
     @Transactional(readOnly = true)
     public List<DepartmentDTO> findAll() {
         List<Department> list = repository.findAll(Sort.by("name"));
-        return list.stream().map(d -> new DepartmentDTO(d)).collect(Collectors.toList());
+        return list.stream().map(DepartmentDTO::new).collect(Collectors.toList());
     }
 }
